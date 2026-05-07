@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chat User</title>
+</head>
+
+<body>
+
+    <h2>Чат пользователя</h2>
+
+    <div id="chat" style="border:1px solid #ccc; height:300px; overflow-y:auto; margin-bottom:10px;"></div>
+
+    <input id="msg" placeholder="Сообщение">
+    <button onclick="send()">Send</button>
+
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+
+    <script>
+        const socket = io("http://localhost:5000");
+
+        const chatId = "69db916139efee06419681ab"; // ⚠️ должен совпадать с админом
+        const chat = document.getElementById("chat");
+        const input = document.getElementById("msg");
+
+        // подключение
+        socket.on("connect", async () => {
+            console.log("CONNECTED:", socket.id);
+
+            socket.emit("join_chat", chatId);
+
+            // очистка
+            chat.innerHTML = "";
+
+            // 🔥 загрузка истории
+            const res = await fetch(`http://localhost:5000/api/message/${chatId}`);
+            const messages = await res.json();
+
+            console.log("HISTORY:", messages);
+
+            messages.forEach(addMessage);
+        });
+
+        // получение новых сообщений
+        socket.on("receive_message", (msg) => {
+            addMessage(msg);
+        });
+
+        // функция отображения сообщений
+        function addMessage(msg) {
+            const div = document.createElement("div");
+            div.innerText = msg.sender + ": " + msg.text;
+            chat.appendChild(div);
+
+            // автоскролл вниз
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // отправка сообщения
+        function send() {
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            socket.emit("send_message", {
+                chatId,
+                sender: "user",
+                text
+            });
+
+            input.value = "";
+        }
+
+        socket.on("disconnect", () => {
+            console.log("❌ DISCONNECTED");
+        });
+    </script>
+
+</body>
+
+</html>

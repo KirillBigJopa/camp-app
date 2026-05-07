@@ -1,0 +1,282 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    overflow: hidden;
+}
+
+/* ОСНОВНОЙ КОНТЕЙНЕР */
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #fafafa;
+}
+
+/* HEADER */
+
+.chat-header {
+    height: 75px;
+    background: white;
+    border-bottom: 1px solid #ececec;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    z-index: 10;
+}
+
+/* ЛЕВАЯ ЧАСТЬ */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.call-btn {
+    background: none;
+    border: none;
+    color: #ff6b00;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* LOGOUT */
+
+.logout {
+    background: none;
+    border: none;
+    color: #ff6b00;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* ЧАТ */
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* СООБЩЕНИЕ */
+
+.message {
+    max-width: 520px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    position: relative;
+
+    font-size: 17px;
+    line-height: 1.5;
+
+    word-wrap: break-word;
+}
+
+/* BOT / ADMIN */
+
+.bot,
+.admin {
+    background: #f1f1f4;
+    align-self: flex-start;
+
+    border-bottom-left-radius: 6px;
+}
+
+/* USER */
+
+.user {
+    background: #ffd29b;
+    align-self: flex-end;
+
+    border-bottom-right-radius: 6px;
+}
+
+/* ВРЕМЯ */
+
+.message-time {
+    font-size: 12px;
+    opacity: 0.6;
+
+    margin-top: 8px;
+    text-align: right;
+}
+
+/* КНОПКИ БОТА */
+
+.message button {
+    margin-top: 12px;
+    margin-right: 8px;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+    border: 2px solid #ff8b2b;
+
+    background: white;
+    color: #ff8b2b;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.message button:hover {
+    background: #ff8b2b;
+    color: white;
+}
+
+/* INPUT */
+
+.chat-input {
+    height: 85px;
+    background: white;
+
+    border-top: 1px solid #ececec;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 20px;
+    gap: 15px;
+}
+
+/* INPUT */
+
+.chat-input input {
+    flex: 1;
+    height: 50px;
+
+    border: none;
+    border-radius: 25px;
+
+    background: #f5f5f5;
+
+    padding: 0 20px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+/* SEND */
+
+.chat-input button {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: #ff6b00;
+    color: white;
+
+    font-size: 22px;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.chat-input button:hover {
+    transform: scale(1.05);
+}
+
+/* VIDEO UI */
+
+.call-container {
+    position: fixed;
+    inset: 0;
+
+    background: #111;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* REMOTE */
+
+#remoteVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* LOCAL */
+
+#localVideo {
+    position: absolute;
+
+    width: 260px;
+    height: 180px;
+
+    bottom: 120px;
+    right: 25px;
+
+    border-radius: 18px;
+    border: 3px solid white;
+
+    object-fit: cover;
+}
+
+/* CONTROLS */
+
+.controls {
+    position: absolute;
+    bottom: 30px;
+
+    display: flex;
+    gap: 18px;
+}
+
+/* CONTROL BUTTONS */
+
+.controls button {
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+    border: none;
+
+    font-size: 26px;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.controls button:hover {
+    transform: scale(1.08);
+}
+
+/* MIC + CAM */
+
+#micBtn,
+#camBtn {
+    background: #2b2b31;
+    color: white;
+}
+
+/* END */
+
+.end {
+    background: #ff2f2f;
+    color: white;
+}

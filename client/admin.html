@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+
+            <div class="sidebar-header">
+                💬 Клиенты
+            </div>
+
+            <div id="chatList" class="chat-list"></div>
+
+        </div>
+
+        <!-- CHAT -->
+        <div class="chat-area">
+
+            <!-- HEADER -->
+            <div class="chat-header">
+
+                <div class="header-left">
+                    <button class="call-btn">
+                        📹 Video Call
+                    </button>
+                </div>
+
+                <button onclick="logout()" class="logout">
+                    ⤴
+                </button>
+
+            </div>
+
+            <!-- MESSAGES -->
+            <div id="messages" class="messages"></div>
+
+            <!-- INPUT -->
+            <div class="chat-input">
+
+              
+
+                <input
+                    id="msgInput"
+                    placeholder="Type a message..."
+                />
+
+                <button onclick="send()" class="send-btn">
+                    ➤
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- VIDEO -->
+
+    <div class="call-container" id="callUI" style="display:none;">
+
+        <video id="remoteVideo" autoplay></video>
+        <video id="localVideo" autoplay muted></video>
+
+        <div class="controls">
+            <button onclick="toggleMic()" id="micBtn">🎤</button>
+            <button onclick="toggleCamera()" id="camBtn">📷</button>
+            <button onclick="endCall()" class="end">📞</button>
+        </div>
+
+    </div>
+
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

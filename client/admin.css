@@ -1,0 +1,395 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    overflow: hidden;
+}
+
+/* ОСНОВА */
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 340px;
+    background: white;
+
+    border-right: 1px solid #e9e9e9;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+
+.sidebar-header {
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+
+    padding-left: 22px;
+
+    font-size: 26px;
+    font-weight: bold;
+
+    color: #ff6b00;
+
+    border-bottom: 1px solid #ececec;
+}
+
+/* СПИСОК */
+
+.chat-list {
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* ЭЛЕМЕНТ */
+
+.chat-item {
+
+    height: 92px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 18px;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid #f1f1f1;
+
+    transition: 0.2s;
+}
+
+.chat-item:hover {
+    background: #fff0dd;
+}
+
+.chat-item.active {
+    background: #f5e3cb;
+}
+
+/* AVATAR */
+
+.avatar {
+
+    width: 52px;
+    height: 52px;
+
+    min-width: 52px;
+
+    border-radius: 16px;
+
+    background: #ffcc99;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+    font-size: 18px;
+
+    color: #b85c00;
+
+    margin-right: 15px;
+}
+
+/* INFO */
+
+.chat-info {
+    flex: 1;
+}
+
+/* TOP */
+
+.chat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+/* NAME */
+
+.chat-name {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* TIME */
+
+.chat-time {
+    font-size: 12px;
+    color: #777;
+}
+
+/* PREVIEW */
+
+.chat-preview {
+    font-size: 13px;
+    color: #888;
+}
+
+/* BADGE */
+
+.badge {
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: #ff9800;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+
+    margin-left: 10px;
+}
+
+/* CHAT AREA */
+
+.chat-area {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+
+.chat-header {
+    height: 75px;
+
+    background: white;
+
+    border-bottom: 1px solid #ececec;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 25px;
+}
+
+/* VIDEO BUTTON */
+
+.call-btn {
+    border: none;
+    background: none;
+
+    color: #ff6b00;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+/* LOGOUT */
+
+.logout {
+    border: none;
+    background: none;
+
+    font-size: 22px;
+
+    color: #ff6b00;
+
+    cursor: pointer;
+}
+
+/* MESSAGES */
+
+.messages {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* MESSAGE */
+
+.message {
+    max-width: 540px;
+
+    padding: 18px 20px;
+
+    border-radius: 18px;
+
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* USER */
+
+.user {
+    align-self: flex-start;
+
+    background: #f1f1f4;
+
+    border-bottom-left-radius: 6px;
+}
+
+/* ADMIN */
+
+.admin {
+    align-self: flex-end;
+
+    background: #ffd29b;
+
+    border-bottom-right-radius: 6px;
+}
+
+/* BOT */
+
+.bot {
+    align-self: flex-start;
+
+    background: #f1f1f4;
+}
+
+/* INPUT */
+
+.chat-input {
+    height: 85px;
+
+    background: white;
+
+    border-top: 1px solid #ececec;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 20px;
+
+    gap: 14px;
+}
+
+
+
+
+/* INPUT */
+
+.chat-input input {
+    flex: 1;
+
+    height: 50px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 25px;
+
+    background: #f5f5f5;
+
+    padding: 0 20px;
+
+    font-size: 16px;
+}
+
+/* SEND */
+
+.send-btn {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #ff6b00;
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+/* VIDEO */
+
+.call-container {
+    position: fixed;
+    inset: 0;
+
+    background: #111;
+
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#remoteVideo {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+#localVideo {
+    position: absolute;
+
+    width: 260px;
+    height: 180px;
+
+    right: 25px;
+    bottom: 120px;
+
+    border-radius: 18px;
+
+    border: 3px solid white;
+
+    object-fit: cover;
+}
+
+/* CONTROLS */
+
+.controls {
+    position: absolute;
+
+    bottom: 30px;
+
+    display: flex;
+    gap: 18px;
+}
+
+.controls button {
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    font-size: 24px;
+
+    cursor: pointer;
+}
+
+#micBtn,
+#camBtn {
+    background: #2b2b31;
+    color: white;
+}
+
+.end {
+    background: red;
+    color: white;
+}

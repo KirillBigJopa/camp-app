@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Чат</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+
+            <div class="header-left">
+                <button onclick="startCall()" class="call-btn">
+                    📹 Video Call
+                </button>
+            </div>
+
+            <button onclick="logout()" class="logout">
+                ⤴
+            </button>
+
+        </div>
+
+        
+
+        <!-- 💬 ЧАТ -->
+        <div id="chat" class="chat-messages"></div>
+
+        <div class="chat-input">
+            <input id="msg" placeholder="Введите сообщение..." />
+            <button onclick="send()">➤</button>
+        </div>
+
+    </div>
+
+    <!-- 📹 ВИДЕО (поверх всего) -->
+    <div class="call-container" id="callUI" style="display:none;">
+
+        <video id="remoteVideo" autoplay></video>
+
+        <video id="localVideo" autoplay muted></video>
+
+        <!-- 🔥 КНОПКИ -->
+        <div class="controls">
+            <button onclick="toggleMic()" id="micBtn">🎤</button>
+            <button onclick="toggleCamera()" id="camBtn">📷</button>
+            <button onclick="endCall()" class="end">📞</button>
+        </div>
+
+    </div>
+
+    <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script src="user.js"></script>
+
+</body>
+
+</html>
