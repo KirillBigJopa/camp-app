@@ -193,7 +193,7 @@ async function startCall() {
     peerConnection.onicecandidate = (event) => {
 
         if (event.candidate) {
-
+            
             socket.emit("ice_candidate", {
                 chatId,
                 candidate: event.candidate
@@ -208,7 +208,7 @@ async function startCall() {
     await peerConnection.setLocalDescription(offer);
 
     console.log("📞 SENDING CALL");
-
+    console.log("EMIT CALL USER");
     socket.emit("call_user", {
         chatId,
         offer
@@ -315,3 +315,9 @@ document
         }
 
     });
+window.startCall = startCall;
+window.send = send;
+window.logout = logout;
+window.toggleMic = toggleMic;
+window.toggleCamera = toggleCamera;
+window.endCall = endCall;
