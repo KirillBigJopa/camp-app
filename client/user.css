@@ -280,3 +280,103 @@ body {
     background: #ff2f2f;
     color: white;
 }
+
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+    }
+
+    .chat-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .chat-header {
+        height: 60px;
+        padding: 0 15px;
+    }
+
+    .chat-header h2 {
+        font-size: 18px;
+    }
+
+    .messages {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .message {
+        max-width: 88%;
+        font-size: 14px;
+        line-height: 1.4;
+        padding: 10px 14px;
+        border-radius: 16px;
+    }
+
+    .message-time {
+        font-size: 11px;
+    }
+
+    .chat-input {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .chat-input input {
+        height: 48px;
+        font-size: 15px;
+        border-radius: 24px;
+        padding: 0 16px;
+    }
+
+    .send-btn {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 50%;
+    }
+
+    .quick-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .quick-buttons button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .video-call-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .videos-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(2, 1fr);
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .videos-grid video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 14px;
+    }
+
+    .call-controls {
+        bottom: 20px;
+        gap: 12px;
+    }
+
+    .call-controls button {
+        width: 52px;
+        height: 52px;
+        font-size: 18px;
+    }
+}
