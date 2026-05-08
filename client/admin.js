@@ -202,7 +202,11 @@ function send() {
 
 // 🔌 подключение
 socket.on("connect", () => {
+
     console.log("ADMIN CONNECTED:", socket.id);
+
+    socket.emit("register_admin");
+
 });
 
 socket.on("incoming_call", async ({ offer, chatId }) => {

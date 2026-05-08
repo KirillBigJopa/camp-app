@@ -3,7 +3,7 @@ import Chat from "../models/Chat.js";
 import { getBotResponse } from "../utils/botResponses.js";
 const adminChats = new Map(); // socket.id -> chatId
 const onlineUsers = new Map(); // userId -> socket.id
-
+const adminSockets = new Set();
 const initChatSocket = (io) => {
 
     io.on("connection", (socket) => {
@@ -20,6 +20,12 @@ const initChatSocket = (io) => {
             io.emit("online_users", onlineUsers.size);
         });
 
+        socket.on("register_admin", () => {
+            console.log("👨‍💼 ADMIN REGISTERED:", socket.id);
+
+            adminSockets.add(socket.id);
+        });
+
         // 🔹 вход в чат (user)
         socket.on("join_chat", (chatId) => {
             console.log("JOIN:", chatId);
@@ -29,11 +35,14 @@ const initChatSocket = (io) => {
 
             console.log("📞 CALL USER:", chatId);
 
-            // отправка ВСЕМ админам
-            io.emit("incoming_call", {
-                offer,
-                chatId
-            });
+            for (const adminId of adminSockets) {
+
+                io.to(adminId).emit("incoming_call", {
+                    offer,
+                    chatId
+                });
+
+            }
 
         });
 

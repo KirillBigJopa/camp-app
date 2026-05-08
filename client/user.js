@@ -201,48 +201,37 @@ async function startCall() {
 
     socket.emit("call_user", { chatId, offer });
 }
-socket.on("incoming_call", async ({ offer }) => {
-    console.log("📞 входящий звонок");
 
-    const accept = confirm("Входящий видеозвонок. Принять?");
+document.getElementById("localVideo").srcObject = localStream;
 
-    if (!accept) return;
+peerConnection = new RTCPeerConnection(servers);
 
-    localStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-    });
-
-    document.getElementById("localVideo").srcObject = localStream;
-
-    peerConnection = new RTCPeerConnection(servers);
-
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    });
-
-    peerConnection.ontrack = (event) => {
-        document.getElementById("remoteVideo").srcObject = event.streams[0];
-    };
-
-    peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-            socket.emit("ice_candidate", {
-                chatId,
-                candidate: event.candidate
-            });
-        }
-    };
-
-    await peerConnection.setRemoteDescription(offer);
-    for (const candidate of pendingCandidates) {
-        await peerConnection.addIceCandidate(candidate);
-    }
-    pendingCandidates = [];
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer);
-    socket.emit("answer_call", { chatId, answer });
+localStream.getTracks().forEach(track => {
+    peerConnection.addTrack(track, localStream);
 });
+
+peerConnection.ontrack = (event) => {
+    document.getElementById("remoteVideo").srcObject = event.streams[0];
+};
+
+peerConnection.onicecandidate = (event) => {
+    if (event.candidate) {
+        socket.emit("ice_candidate", {
+            chatId,
+            candidate: event.candidate
+        });
+    }
+};
+
+await peerConnection.setRemoteDescription(offer);
+for (const candidate of pendingCandidates) {
+    await peerConnection.addIceCandidate(candidate);
+}
+pendingCandidates = [];
+const answer = await peerConnection.createAnswer();
+await peerConnection.setLocalDescription(answer);
+socket.emit("answer_call", { chatId, answer });
+
 socket.on("call_accepted", async ({ answer }) => {
     console.log("✅ звонок принят");
 
