@@ -33,9 +33,15 @@ const initChatSocket = (io) => {
         });
         socket.on("call_user", ({ chatId, offer }) => {
 
-            console.log("📞 CALL USER:", chatId);
+            console.log("📞 CALL USER EVENT");
+
+            console.log("CHAT ID:", chatId);
+
+            console.log("ADMINS:", [...adminSockets]);
 
             for (const adminId of adminSockets) {
+
+                console.log("📤 sending call to admin:", adminId);
 
                 io.to(adminId).emit("incoming_call", {
                     offer,

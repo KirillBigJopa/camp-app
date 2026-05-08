@@ -204,12 +204,13 @@ function send() {
 socket.on("connect", () => {
 
     console.log("ADMIN CONNECTED:", socket.id);
-
+    console.log("👨‍💼 REGISTER ADMIN");
     socket.emit("register_admin");
 
 });
 
 socket.on("incoming_call", async ({ offer, chatId }) => {
+    console.log("📥 INCOMING CALL RECEIVED");
     if (user.role !== "admin") return;
     console.log("📞 входящий звонок");
 
