@@ -178,7 +178,41 @@ async function startCall() {
         console.error("❌ нет доступа к камере", e);
         return;
     }
+    document.getElementById("localVideo").srcObject = localStream;
 
+    peerConnection = new RTCPeerConnection(servers);
+
+    localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+    });
+
+    peerConnection.ontrack = (event) => {
+        document.getElementById("remoteVideo").srcObject = event.streams[0];
+    };
+
+    peerConnection.onicecandidate = (event) => {
+
+        if (event.candidate) {
+
+            socket.emit("ice_candidate", {
+                chatId,
+                candidate: event.candidate
+            });
+
+        }
+
+    };
+
+    const offer = await peerConnection.createOffer();
+
+    await peerConnection.setLocalDescription(offer);
+
+    console.log("📞 SENDING CALL");
+
+    socket.emit("call_user", {
+        chatId,
+        offer
+    });
     socket.on("call_accepted", async ({ answer }) => {
         console.log("✅ звонок принят");
 
