@@ -6,7 +6,9 @@ let pendingCandidates = [];
 const API_URL =
     "https://camp-app-ciic.onrender.com";
 
-const socket = io(API_URL);
+const socket = io(API_URL, {
+    transports: ["websocket", "polling"]
+});
 const token = localStorage.getItem("token");
 
 // ✅ сначала читаем user
@@ -63,13 +65,14 @@ async function initChat() {
     console.log("MY CHAT:", chatId);
 
     startSocket();
+    console.log("SOCKET STARTED");
 }
 function startSocket() {
     if (!chatId) {
         console.log("❌ chatId null, socket не запускаем");
         return;
     }
-
+    console.log("JOIN CHAT:", chatId);
     socket.emit("join_chat", chatId);
     loadMessages();
 }
@@ -89,6 +92,7 @@ async function loadMessages() {
 
 // realtime
 socket.on("receive_message", (msg) => {
+    console.log("MESSAGE RECEIVED", msg);
     addMessage(msg);
 });
 
