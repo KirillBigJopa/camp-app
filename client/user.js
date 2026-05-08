@@ -156,95 +156,7 @@ function send() {
 
     input.value = "";
 }
-async function startCall() {
 
-    console.log("START CALL");
-
-    const callUI = document.getElementById("callUI");
-
-    if (!callUI) {
-        console.log("❌ callUI не найден");
-        return;
-    }
-
-    callUI.style.display = "flex"; // 🔥 обязательно
-
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true
-        });
-    } catch (e) {
-        console.error("❌ нет доступа к камере", e);
-        return;
-    }
-    document.getElementById("localVideo").srcObject = localStream;
-
-    peerConnection = new RTCPeerConnection(servers);
-
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    });
-
-    peerConnection.ontrack = (event) => {
-        document.getElementById("remoteVideo").srcObject = event.streams[0];
-    };
-
-    peerConnection.onicecandidate = (event) => {
-
-        if (event.candidate) {
-            
-            socket.emit("ice_candidate", {
-                chatId,
-                candidate: event.candidate
-            });
-
-        }
-
-    };
-
-    const offer = await peerConnection.createOffer();
-
-    await peerConnection.setLocalDescription(offer);
-
-    console.log("📞 SENDING CALL");
-    console.log("EMIT CALL USER");
-    socket.emit("call_user", {
-        chatId,
-        offer
-    });
-    socket.on("call_accepted", async ({ answer }) => {
-        console.log("✅ звонок принят");
-
-        await peerConnection.setRemoteDescription(answer);
-        for (const candidate of pendingCandidates) {
-            await peerConnection.addIceCandidate(candidate);
-        }
-        pendingCandidates = [];
-    });
-    socket.on("ice_candidate", async ({ candidate }) => {
-        if (!peerConnection || !peerConnection.remoteDescription) {
-            pendingCandidates.push(candidate);
-            return;
-        }
-
-        try {
-            await peerConnection.addIceCandidate(candidate);
-        } catch (e) {
-            console.error("ICE error", e);
-        }
-    });
-
-
-
-    function logout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
-        window.location.href = "login.html";
-    }
-
-}
 function toggleMic() {
 
     if (!localStream) return;
@@ -321,3 +233,62 @@ window.logout = logout;
 window.toggleMic = toggleMic;
 window.toggleCamera = toggleCamera;
 window.endCall = endCall;
+window.startCall = async function () {
+
+    console.log("🔥 BUTTON CLICK WORKS");
+
+    const callUI = document.getElementById("callUI");
+
+    callUI.style.display = "flex";
+
+    try {
+
+        localStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        });
+
+        document.getElementById("localVideo").srcObject = localStream;
+
+        peerConnection = new RTCPeerConnection(servers);
+
+        localStream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+        });
+
+        peerConnection.ontrack = (event) => {
+            document.getElementById("remoteVideo").srcObject =
+                event.streams[0];
+        };
+
+        peerConnection.onicecandidate = (event) => {
+
+            if (event.candidate) {
+
+                socket.emit("ice_candidate", {
+                    chatId,
+                    candidate: event.candidate
+                });
+
+            }
+
+        };
+
+        const offer = await peerConnection.createOffer();
+
+        await peerConnection.setLocalDescription(offer);
+
+        console.log("📞 EMIT CALL USER");
+
+        socket.emit("call_user", {
+            chatId,
+            offer
+        });
+
+    } catch (e) {
+
+        console.error("❌ CALL ERROR", e);
+
+    }
+
+};
