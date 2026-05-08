@@ -26,7 +26,15 @@ const initChatSocket = (io) => {
             socket.join(chatId);
         });
         socket.on("call_user", ({ chatId, offer }) => {
-            socket.to(chatId).emit("incoming_call", { offer, chatId });
+
+            console.log("📞 CALL USER:", chatId);
+
+            // отправка ВСЕМ админам
+            io.emit("incoming_call", {
+                offer,
+                chatId
+            });
+
         });
 
         // ответ на звонок

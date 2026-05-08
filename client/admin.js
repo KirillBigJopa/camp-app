@@ -204,8 +204,9 @@ function send() {
 socket.on("connect", () => {
     console.log("ADMIN CONNECTED:", socket.id);
 });
-socket.on("incoming_call", async ({ offer, chatId }) => {
 
+socket.on("incoming_call", async ({ offer, chatId }) => {
+    if (user.role !== "admin") return;
     console.log("📞 входящий звонок");
 
     // 🔥 ВАЖНО
