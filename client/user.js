@@ -175,149 +175,93 @@ async function startCall() {
         return;
     }
 
-    document.getElementById("localVideo").srcObject = localStream;
+    socket.on("call_accepted", async ({ answer }) => {
+        console.log("✅ звонок принят");
 
-    peerConnection = new RTCPeerConnection(servers);
-
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    });
-
-    peerConnection.ontrack = (event) => {
-        document.getElementById("remoteVideo").srcObject = event.streams[0];
-    };
-
-    peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-            socket.emit("ice_candidate", {
-                chatId,
-                candidate: event.candidate
-            });
+        await peerConnection.setRemoteDescription(answer);
+        for (const candidate of pendingCandidates) {
+            await peerConnection.addIceCandidate(candidate);
         }
-    };
+        pendingCandidates = [];
+    });
+    socket.on("ice_candidate", async ({ candidate }) => {
+        if (!peerConnection || !peerConnection.remoteDescription) {
+            pendingCandidates.push(candidate);
+            return;
+        }
 
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
+        try {
+            await peerConnection.addIceCandidate(candidate);
+        } catch (e) {
+            console.error("ICE error", e);
+        }
+    });
+    function toggleMic() {
+        if (!localStream) return;
 
-    socket.emit("call_user", { chatId, offer });
-}
+        const track = localStream.getAudioTracks()[0];
+        if (!track) return;
 
-document.getElementById("localVideo").srcObject = localStream;
+        track.enabled = !track.enabled;
 
-peerConnection = new RTCPeerConnection(servers);
+        document.getElementById("micBtn").style.background =
+            track.enabled ? "#2a2a2f" : "gray";
+    }
 
-localStream.getTracks().forEach(track => {
-    peerConnection.addTrack(track, localStream);
-});
+    function toggleCamera() {
+        if (!localStream) return;
 
-peerConnection.ontrack = (event) => {
-    document.getElementById("remoteVideo").srcObject = event.streams[0];
-};
+        const track = localStream.getVideoTracks()[0];
+        if (!track) return;
 
-peerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-        socket.emit("ice_candidate", {
-            chatId,
-            candidate: event.candidate
+        track.enabled = !track.enabled;
+
+        document.getElementById("camBtn").style.background =
+            track.enabled ? "#2a2a2f" : "gray";
+    }
+    function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        window.location.href = "login.html";
+    }
+    function logout() {
+        socket.disconnect();
+
+        localStorage.clear();
+
+        window.location.href = "login.html";
+    }
+    function endCall() {
+        // закрыть соединение
+        if (peerConnection) {
+            peerConnection.close();
+            peerConnection = null;
+        }
+
+        // остановить камеру и микрофон
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+            localStream = null;
+        }
+
+        // очистить видео
+        document.getElementById("localVideo").srcObject = null;
+        document.getElementById("remoteVideo").srcObject = null;
+
+        // 🔥 СКРЫТЬ ОКНО ЗВОНКА
+        document.getElementById("callUI").style.display = "none";
+
+        console.log("📴 звонок завершён");
+    }
+    initChat();
+    document
+        .getElementById("msg")
+        .addEventListener("keydown", (e) => {
+
+            if (e.key === "Enter") {
+                send();
+            }
+
         });
-    }
-};
-
-await peerConnection.setRemoteDescription(offer);
-for (const candidate of pendingCandidates) {
-    await peerConnection.addIceCandidate(candidate);
 }
-pendingCandidates = [];
-const answer = await peerConnection.createAnswer();
-await peerConnection.setLocalDescription(answer);
-socket.emit("answer_call", { chatId, answer });
-
-socket.on("call_accepted", async ({ answer }) => {
-    console.log("✅ звонок принят");
-
-    await peerConnection.setRemoteDescription(answer);
-    for (const candidate of pendingCandidates) {
-        await peerConnection.addIceCandidate(candidate);
-    }
-    pendingCandidates = [];
-});
-socket.on("ice_candidate", async ({ candidate }) => {
-    if (!peerConnection || !peerConnection.remoteDescription) {
-        pendingCandidates.push(candidate);
-        return;
-    }
-
-    try {
-        await peerConnection.addIceCandidate(candidate);
-    } catch (e) {
-        console.error("ICE error", e);
-    }
-});
-function toggleMic() {
-    if (!localStream) return;
-
-    const track = localStream.getAudioTracks()[0];
-    if (!track) return;
-
-    track.enabled = !track.enabled;
-
-    document.getElementById("micBtn").style.background =
-        track.enabled ? "#2a2a2f" : "gray";
-}
-
-function toggleCamera() {
-    if (!localStream) return;
-
-    const track = localStream.getVideoTracks()[0];
-    if (!track) return;
-
-    track.enabled = !track.enabled;
-
-    document.getElementById("camBtn").style.background =
-        track.enabled ? "#2a2a2f" : "gray";
-}
-function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    window.location.href = "login.html";
-}
-function logout() {
-    socket.disconnect();
-
-    localStorage.clear();
-
-    window.location.href = "login.html";
-}
-function endCall() {
-    // закрыть соединение
-    if (peerConnection) {
-        peerConnection.close();
-        peerConnection = null;
-    }
-
-    // остановить камеру и микрофон
-    if (localStream) {
-        localStream.getTracks().forEach(track => track.stop());
-        localStream = null;
-    }
-
-    // очистить видео
-    document.getElementById("localVideo").srcObject = null;
-    document.getElementById("remoteVideo").srcObject = null;
-
-    // 🔥 СКРЫТЬ ОКНО ЗВОНКА
-    document.getElementById("callUI").style.display = "none";
-
-    console.log("📴 звонок завершён");
-}
-initChat();
-document
-    .getElementById("msg")
-    .addEventListener("keydown", (e) => {
-
-        if (e.key === "Enter") {
-            send();
-        }
-
-    });
