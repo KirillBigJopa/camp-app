@@ -227,7 +227,6 @@ document
         }
 
     });
-window.startCall = startCall;
 window.send = send;
 window.logout = logout;
 window.toggleMic = toggleMic;
