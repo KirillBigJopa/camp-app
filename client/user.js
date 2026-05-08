@@ -200,72 +200,84 @@ async function startCall() {
             console.error("ICE error", e);
         }
     });
-    function toggleMic() {
-        if (!localStream) return;
 
-        const track = localStream.getAudioTracks()[0];
-        if (!track) return;
 
-        track.enabled = !track.enabled;
 
-        document.getElementById("micBtn").style.background =
-            track.enabled ? "#2a2a2f" : "gray";
-    }
-
-    function toggleCamera() {
-        if (!localStream) return;
-
-        const track = localStream.getVideoTracks()[0];
-        if (!track) return;
-
-        track.enabled = !track.enabled;
-
-        document.getElementById("camBtn").style.background =
-            track.enabled ? "#2a2a2f" : "gray";
-    }
     function logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
 
         window.location.href = "login.html";
     }
-    function logout() {
-        socket.disconnect();
 
-        localStorage.clear();
-
-        window.location.href = "login.html";
-    }
-    function endCall() {
-        // закрыть соединение
-        if (peerConnection) {
-            peerConnection.close();
-            peerConnection = null;
-        }
-
-        // остановить камеру и микрофон
-        if (localStream) {
-            localStream.getTracks().forEach(track => track.stop());
-            localStream = null;
-        }
-
-        // очистить видео
-        document.getElementById("localVideo").srcObject = null;
-        document.getElementById("remoteVideo").srcObject = null;
-
-        // 🔥 СКРЫТЬ ОКНО ЗВОНКА
-        document.getElementById("callUI").style.display = "none";
-
-        console.log("📴 звонок завершён");
-    }
-    initChat();
-    document
-        .getElementById("msg")
-        .addEventListener("keydown", (e) => {
-
-            if (e.key === "Enter") {
-                send();
-            }
-
-        });
 }
+function toggleMic() {
+
+    if (!localStream) return;
+
+    const track = localStream.getAudioTracks()[0];
+    if (!track) return;
+
+    track.enabled = !track.enabled;
+
+    document.getElementById("micBtn").style.background =
+        track.enabled ? "#2a2a2f" : "gray";
+}
+
+
+
+function toggleCamera() {
+
+    if (!localStream) return;
+
+    const track = localStream.getVideoTracks()[0];
+    if (!track) return;
+
+    track.enabled = !track.enabled;
+
+    document.getElementById("camBtn").style.background =
+        track.enabled ? "#2a2a2f" : "gray";
+}
+
+
+
+function logout() {
+
+    socket.disconnect();
+
+    localStorage.clear();
+
+    window.location.href = "login.html";
+}
+
+
+
+function endCall() {
+
+    if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+    }
+
+    if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+    }
+
+    document.getElementById("localVideo").srcObject = null;
+    document.getElementById("remoteVideo").srcObject = null;
+
+    document.getElementById("callUI").style.display = "none";
+
+    console.log("📴 звонок завершён");
+}
+initChat();
+document
+    .getElementById("msg")
+    .addEventListener("keydown", (e) => {
+
+        if (e.key === "Enter") {
+            send();
+        }
+
+    });
