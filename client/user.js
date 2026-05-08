@@ -3,7 +3,10 @@ let localStream;
 let peerConnection;
 let pendingCandidates = [];
 
-const socket = io("http://localhost:5000");
+const API_URL =
+    "https://camp-app-ciic.onrender.com";
+
+const socket = io(API_URL);
 const token = localStorage.getItem("token");
 
 // ✅ сначала читаем user
@@ -42,7 +45,7 @@ if (userRaw && userRaw !== "undefined") {
 
 
 async function initChat() {
-    const res = await fetch("http://localhost:5000/api/chat/my", {
+    const res = await fetch(`${API_URL}/api/chat/my`, {
         headers: {
             Authorization: "Bearer " + token
         }
@@ -73,7 +76,7 @@ function startSocket() {
 async function loadMessages() {
     chat.innerHTML = "";
 
-    const res = await fetch(`http://localhost:5000/api/message/${chatId}`, {
+    const res = await fetch(`${API_URL}/api/message/${chatId}`, {
         headers: {
             Authorization: "Bearer " + token
         }

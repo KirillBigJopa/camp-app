@@ -1,4 +1,7 @@
-const socket = io("http://localhost:5000");
+const API_URL =
+    "https://camp-app-ciic.onrender.com";
+
+const socket = io(API_URL);
 let localStream;
 let peerConnection;
 let pendingCandidates = [];
@@ -50,7 +53,7 @@ socket.on("admin_notification", (data) => {
 // 🔥 загрузка списка чатов
 async function updateChatList() {
 
-    const res = await fetch("http://localhost:5000/api/chat");
+    const res = await fetch(`${API_URL}/api/chat`);
 
     const chats = await res.json();
 
@@ -148,7 +151,7 @@ async function openChat(chatId) {
     unread[chatId] = 0;
 
     // загрузка истории
-    const res = await fetch(`http://localhost:5000/api/message/${chatId}`, {
+    const res = await fetch(`${API_URL}/api/message/${chatId}`, {
         headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
         }
